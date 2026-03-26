@@ -1,0 +1,69 @@
+paths:
+  run_root_base: /disk/chojm/experiments
+  realm_cache: /disk/chojm/.cache/realm
+
+model:
+  backend: vllm
+  model_name: Qwen/Qwen2.5-14B-Instruct
+  crosscheck_model_name: Qwen/Qwen2.5-32B-Instruct
+  base_url: http://localhost:8000/v1
+  api_key_env: OPENAI_API_KEY
+  temperature: 0.2
+  top_p: 0.95
+  max_new_tokens: 768
+
+runtime:
+  max_depth: 1
+  max_iterations: 4
+  max_timeout: 180
+  max_errors: 6
+  verbose: false
+  saga_mode: iteration
+  saga_file_snapshot_mode: diff
+  saga_max_retries: 2
+
+run:
+  stage1:
+    seeds: [0, 1]
+    extension_variants: [V1, V2]
+    failure_injection_ratio: 0.0
+    realm:
+      enabled: true
+      problems: [P8, P9]
+      limit_per_problem: 10
+      specific_ids:
+        P8: [p8_instance_001, p8_instance_002, p8_instance_003, p8_instance_004, p8_instance_005, p8_instance_006, p8_instance_007, p8_instance_008, p8_instance_009, p8_instance_010]
+        P9: [p9_instance_001, p9_instance_002, p9_instance_003, p9_instance_004, p9_instance_005, p9_instance_006, p9_instance_007, p9_instance_008, p9_instance_009, p9_instance_010]
+    oolong:
+      enabled: true
+      dataset_id: oolongbench/oolong-synth
+      split: validation
+      limit: 50
+      stratified: false
+    longbench:
+      enabled: true
+      dataset_id: zai-org/LongBench-v2
+      split: train
+      limit: 30
+      stratified: true
+
+  stage2:
+    seeds: [0, 1, 2, 3, 4]
+    extension_variants: [V1, V2, V3]
+    failure_injection_ratio: 0.2
+    realm:
+      enabled: true
+      problems: [P5, P6, P8, P9]
+      limit_per_problem: 40
+    oolong:
+      enabled: true
+      dataset_id: oolongbench/oolong-synth
+      split: validation
+      limit: 300
+      stratified: true
+    longbench:
+      enabled: true
+      dataset_id: zai-org/LongBench-v2
+      split: train
+      limit: 120
+      stratified: true

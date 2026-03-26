@@ -1,0 +1,15 @@
+{
+  "P8": [
+    "p8_instance_065",
+    "p8_instance_066",
+    "p8_instance_068",
+    "p8_instance_069",
+    "p8_instance_070",
+    "p8_instance_071",
+    "p8_instance_072",
+    "p8_instance_073",
+    "p8_instance_074",
+    "p8_instance_075"
+  ],
+  "note": "Unseen holdout for v7.11 final evaluation; disjoint from test/test_v2/test_v3/test_v4/test_v5 in v7.10"
+}

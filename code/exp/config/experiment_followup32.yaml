@@ -1,0 +1,44 @@
+paths:
+  run_root_base: /disk/chojm/experiments
+  realm_cache: /disk/chojm/.cache/realm
+
+model:
+  backend: vllm
+  model_name: Qwen/Qwen2.5-32B-Instruct
+  base_url: http://localhost:8000/v1
+  api_key_env: OPENAI_API_KEY
+  temperature: 0.2
+  top_p: 0.95
+  max_new_tokens: 1024
+
+runtime:
+  max_depth: 1
+  max_iterations: 6
+  max_timeout: 180
+  max_errors: 6
+  verbose: false
+  saga_mode: iteration
+  saga_file_snapshot_mode: diff
+  saga_max_retries: 2
+
+run:
+  stage_followup32:
+    seeds: [0]   # no seed repetition
+    extension_variants: [V2]   # no ablation sweep
+    failure_injection_ratio: 0.0
+    realm:
+      enabled: false
+      problems: [P8, P9]
+      limit_per_problem: 0
+    oolong:
+      enabled: true
+      dataset_id: oolongbench/oolong-synth
+      split: validation
+      limit: 120
+      stratified: true
+    longbench:
+      enabled: false
+      dataset_id: zai-org/LongBench-v2
+      split: train
+      limit: 0
+      stratified: false

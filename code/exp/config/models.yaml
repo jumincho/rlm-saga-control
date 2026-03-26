@@ -1,0 +1,15 @@
+primary:
+  backend: vllm
+  model_name: Qwen/Qwen2.5-14B-Instruct
+  base_url: http://localhost:8000/v1
+  temperature: 0.2
+  top_p: 0.95
+  max_new_tokens: 2048
+
+crosscheck:
+  backend: vllm
+  model_name: Qwen/Qwen2.5-32B-Instruct
+  base_url: http://localhost:8000/v1
+  temperature: 0.2
+  top_p: 0.95
+  max_new_tokens: 2048

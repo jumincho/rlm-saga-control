@@ -1,0 +1,382 @@
+paths:
+  run_root_base: /disk/chojm/experiments
+  realm_cache: /disk/chojm/.cache/realm
+model:
+  backend: vllm
+  model_name: Qwen/Qwen2.5-14B-Instruct
+  base_url: http://localhost:8000/v1
+  api_key_env: OPENAI_API_KEY
+  temperature: 0.2
+  top_p: 0.95
+  max_new_tokens: 512
+runtime:
+  policy_version: v7_11
+  max_depth: 1
+  max_iterations: 5
+  max_timeout: 120
+  max_errors: 10
+  verbose: false
+  saga_mode: iteration
+  saga_file_snapshot_mode: diff
+  saga_max_retries: 2
+  runtime_eval_mode: runtime
+  runtime_validator_mode: auto
+  runtime_validator_mode_prefix: p8_hard
+  planning_json_repair: true
+  planning_fill_events_repair: true
+  planning_fill_events_max_attempts: 2
+  planning_targeted_retry: true
+  planning_early_exit_enabled: true
+  planning_llm_call_cap: 3
+  planning_prefix_lock: true
+  planning_prefix_lock_variants:
+  - V3_PREFIX
+  - V3_PREFIX_SPLIT
+  - V3_PREFIX_NO_SPLIT
+  planning_selection_policy: default
+  planning_selection_policy_prefix_lock: invariant_first
+  planning_boundary_split_enabled: true
+  planning_boundary_split_force: true
+  planning_boundary_split_variants:
+  - V3_PREFIX_SPLIT
+  - V0_SPLIT_ONLY
+  planning_boundary_canonicalize_split: true
+  planning_boundary_structural_synthesis: true
+  planning_boundary_suffix_only_output: true
+  planning_boundary_suffix_schema_strict: true
+  planning_boundary_suffix_regen_always: true
+  planning_boundary_suffix_regen_variants:
+  - V3_PREFIX_SPLIT
+  planning_boundary_suffix_regen_attempts: 2
+  planning_boundary_autofix_pre_minutes: 15
+  planning_boundary_autofix_post_minutes: 15
+  planning_boundary_autofix_post_event_minutes: 10
+  planning_boundary_gate_fix_iters: 2
+  planning_boundary_real_candidate_hint: true
+  planning_boundary_location_fix_travel_minutes: 15
+  planning_prefix_block_disruption_terms: true
+  planning_commit_best_of: true
+  planning_photo_time_hard_gate: true
+  planning_photo_time_hard_loops: 2
+  planning_force_split_fill_fallback_attempts: 2
+  planning_immutability_prefix_hash_guard: true
+  planning_immutability_prefix_hash_guard_variants:
+  - V3_PREFIX_SPLIT
+  planning_prefix_monotonic_repair: true
+  planning_boundary_state_shift_fix: true
+  planning_boundary_location_fix: true
+  planning_tailor_hours_deterministic_repair: true
+  planning_tailor_hard_gate: true
+  planning_tailor_hard_loops: 1
+run:
+  stage_feedback_v7_11_smoke:
+    seeds:
+    - 0
+    extension_variants:
+    - V0_SPLIT_ONLY
+    - V3_PREFIX_SPLIT
+    failure_injection_ratio: 0.0
+    realm:
+      enabled: true
+      problems:
+      - P8
+      specific_ids:
+        P8:
+        - p8_instance_001
+        - p8_instance_004
+        - p8_instance_005
+        - p8_instance_006
+        - p8_instance_010
+      boundary_crossing_only: true
+      scenario_applicability_mode: p8_fixed
+    oolong:
+      enabled: false
+    longbench:
+      enabled: false
+  stage_feedback_v7_11_debug:
+    seeds:
+    - 0
+    - 1
+    extension_variants:
+    - V0_SPLIT_ONLY
+    - V3_PREFIX_SPLIT
+    failure_injection_ratio: 0.0
+    realm:
+      enabled: true
+      problems:
+      - P8
+      specific_ids:
+        P8:
+        - p8_instance_001
+        - p8_instance_004
+        - p8_instance_005
+        - p8_instance_006
+        - p8_instance_010
+        - p8_instance_013
+        - p8_instance_015
+        - p8_instance_016
+        - p8_instance_018
+        - p8_instance_019
+        - p8_instance_053
+        - p8_instance_042
+        - p8_instance_024
+        - p8_instance_011
+        - p8_instance_014
+      boundary_crossing_only: true
+      scenario_applicability_mode: p8_fixed
+    oolong:
+      enabled: false
+    longbench:
+      enabled: false
+  stage_feedback_v7_11_boundary_dev:
+    seeds:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    extension_variants:
+    - V0_SPLIT_ONLY
+    - V3_PREFIX_SPLIT
+    failure_injection_ratio: 0.0
+    realm:
+      enabled: true
+      problems:
+      - P8
+      specific_ids:
+        P8:
+        - p8_instance_053
+        - p8_instance_042
+        - p8_instance_024
+        - p8_instance_011
+        - p8_instance_014
+        - p8_instance_081
+        - p8_instance_088
+        - p8_instance_017
+        - p8_instance_084
+        - p8_instance_079
+        - p8_instance_038
+        - p8_instance_002
+        - p8_instance_055
+        - p8_instance_023
+        - p8_instance_048
+        - p8_instance_012
+        - p8_instance_007
+        - p8_instance_082
+        - p8_instance_009
+        - p8_instance_095
+        - p8_instance_020
+        - p8_instance_025
+        - p8_instance_031
+        - p8_instance_003
+      boundary_crossing_only: true
+      scenario_applicability_mode: p8_fixed
+    oolong:
+      enabled: false
+    longbench:
+      enabled: false
+  stage_feedback_v7_11_boundary_test:
+    seeds:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    extension_variants:
+    - V0_SPLIT_ONLY
+    - V3_PREFIX_SPLIT
+    failure_injection_ratio: 0.0
+    realm:
+      enabled: true
+      problems:
+      - P8
+      specific_ids:
+        P8:
+        - p8_instance_060
+        - p8_instance_044
+        - p8_instance_064
+        - p8_instance_008
+        - p8_instance_094
+        - p8_instance_049
+        - p8_instance_092
+        - p8_instance_067
+        - p8_instance_030
+        - p8_instance_100
+      boundary_crossing_only: true
+      scenario_applicability_mode: p8_fixed
+    oolong:
+      enabled: false
+    longbench:
+      enabled: false
+  stage_feedback_v7_11_boundary_test_v2:
+    seeds:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    extension_variants:
+    - V0_SPLIT_ONLY
+    - V3_PREFIX_SPLIT
+    failure_injection_ratio: 0.0
+    realm:
+      enabled: true
+      problems:
+      - P8
+      specific_ids:
+        P8:
+        - p8_instance_001
+        - p8_instance_004
+        - p8_instance_005
+        - p8_instance_006
+        - p8_instance_010
+        - p8_instance_013
+        - p8_instance_015
+        - p8_instance_016
+        - p8_instance_018
+        - p8_instance_019
+      boundary_crossing_only: true
+      scenario_applicability_mode: p8_fixed
+    oolong:
+      enabled: false
+    longbench:
+      enabled: false
+  stage_feedback_v7_11_boundary_test_v3:
+    seeds:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    extension_variants:
+    - V0_SPLIT_ONLY
+    - V3_PREFIX_SPLIT
+    failure_injection_ratio: 0.0
+    realm:
+      enabled: true
+      problems:
+      - P8
+      specific_ids:
+        P8:
+        - p8_instance_021
+        - p8_instance_022
+        - p8_instance_026
+        - p8_instance_027
+        - p8_instance_028
+        - p8_instance_029
+        - p8_instance_032
+        - p8_instance_033
+        - p8_instance_034
+        - p8_instance_035
+      boundary_crossing_only: true
+      scenario_applicability_mode: p8_fixed
+    oolong:
+      enabled: false
+    longbench:
+      enabled: false
+  stage_feedback_v7_11_boundary_test_v4:
+    seeds:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    extension_variants:
+    - V0_SPLIT_ONLY
+    - V3_PREFIX_SPLIT
+    failure_injection_ratio: 0.0
+    realm:
+      enabled: true
+      problems:
+      - P8
+      specific_ids:
+        P8:
+        - p8_instance_036
+        - p8_instance_037
+        - p8_instance_039
+        - p8_instance_040
+        - p8_instance_041
+        - p8_instance_043
+        - p8_instance_045
+        - p8_instance_046
+        - p8_instance_047
+        - p8_instance_050
+      boundary_crossing_only: true
+      scenario_applicability_mode: p8_fixed
+    oolong:
+      enabled: false
+    longbench:
+      enabled: false
+  stage_feedback_v7_11_boundary_test_v5:
+    seeds:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    extension_variants:
+    - V0_SPLIT_ONLY
+    - V3_PREFIX_SPLIT
+    failure_injection_ratio: 0.0
+    realm:
+      enabled: true
+      problems:
+      - P8
+      specific_ids:
+        P8:
+        - p8_instance_051
+        - p8_instance_052
+        - p8_instance_054
+        - p8_instance_056
+        - p8_instance_057
+        - p8_instance_058
+        - p8_instance_059
+        - p8_instance_061
+        - p8_instance_062
+        - p8_instance_063
+      boundary_crossing_only: true
+      scenario_applicability_mode: p8_fixed
+    oolong:
+      enabled: false
+    longbench:
+      enabled: false
+  stage_feedback_v7_11_boundary_test_v6:
+    seeds:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    extension_variants:
+    - V0_SPLIT_ONLY
+    - V3_PREFIX_SPLIT
+    failure_injection_ratio: 0.0
+    realm:
+      enabled: true
+      problems:
+      - P8
+      specific_ids:
+        P8:
+        - p8_instance_065
+        - p8_instance_066
+        - p8_instance_068
+        - p8_instance_069
+        - p8_instance_070
+        - p8_instance_071
+        - p8_instance_072
+        - p8_instance_073
+        - p8_instance_074
+        - p8_instance_075
+      boundary_crossing_only: true
+      scenario_applicability_mode: p8_fixed
+    oolong:
+      enabled: false
+    longbench:
+      enabled: false

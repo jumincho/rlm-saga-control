@@ -1,0 +1,8 @@
+policy:
+  stage1_ratio: 0.0
+  stage2_ratio: 0.2
+  deterministic_key: "instance_id+seed"
+  modes:
+    - code_exception
+    - file_io_failure
+    - disruption_escalation

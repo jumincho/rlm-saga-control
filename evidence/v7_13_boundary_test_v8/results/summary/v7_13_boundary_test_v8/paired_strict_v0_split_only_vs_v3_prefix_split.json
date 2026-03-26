@@ -1,0 +1,14 @@
+{
+  "left": "V0_SPLIT_ONLY",
+  "right": "V3_PREFIX_SPLIT",
+  "paired_n": 60,
+  "wins": 21,
+  "losses": 8,
+  "ties": 31,
+  "mean_success_diff": 0.21666666666666667,
+  "bootstrap_ci95": [
+    0.05,
+    0.38333333333333336
+  ],
+  "sign_test_p_two_sided": 0.0241195447742939
+}

@@ -1,0 +1,105 @@
+paths:
+  run_root_base: /disk/chojm/experiments
+  realm_cache: /disk/chojm/.cache/realm
+
+model:
+  backend: vllm
+  model_name: Qwen/Qwen2.5-14B-Instruct
+  base_url: http://localhost:8000/v1
+  api_key_env: OPENAI_API_KEY
+  temperature: 0.2
+  top_p: 0.95
+  max_new_tokens: 512
+
+runtime:
+  max_depth: 1
+  max_iterations: 5
+  max_timeout: 120
+  max_errors: 10
+  verbose: false
+  saga_mode: iteration
+  saga_file_snapshot_mode: diff
+  saga_max_retries: 2
+  runtime_eval_mode: runtime
+  runtime_validator_mode: auto
+  runtime_validator_mode_prefix: p8_hard
+  planning_json_repair: true
+  planning_fill_events_repair: true
+  planning_fill_events_max_attempts: 2
+  planning_targeted_retry: true
+  planning_prefix_lock: true
+  planning_prefix_lock_variants: [V3_PREFIX, V3_PREFIX_SPLIT, V3_PREFIX_NO_SPLIT]
+  planning_selection_policy: default
+  planning_selection_policy_prefix_lock: invariant_first
+  planning_boundary_split_enabled: true
+  planning_boundary_split_force: true
+  planning_boundary_split_variants: [V3_PREFIX_SPLIT, V0_SPLIT_ONLY]
+  planning_boundary_structural_synthesis: true
+  planning_boundary_suffix_only_output: true
+  planning_boundary_suffix_regen_always: true
+  planning_boundary_suffix_regen_variants: [V3_PREFIX_SPLIT]
+  planning_boundary_suffix_regen_attempts: 2
+  planning_boundary_real_candidate_hint: true
+  planning_commit_best_of: true
+  planning_photo_time_hard_gate: true
+  planning_photo_time_hard_loops: 2
+  planning_force_split_fill_fallback_attempts: 2
+
+run:
+  stage_feedback_v7_5_smoke:
+    seeds: [0]
+    extension_variants: [V0_SPLIT_ONLY, V3_PREFIX_SPLIT]
+    failure_injection_ratio: 0.0
+    realm:
+      enabled: true
+      problems: [P8]
+      limit_per_problem: 5
+      boundary_crossing_only: true
+      scenario_applicability_mode: p8_fixed
+    oolong:
+      enabled: false
+    longbench:
+      enabled: false
+
+  stage_feedback_v7_5_boundary_full:
+    seeds: [0, 1, 2, 3, 4, 5]
+    extension_variants: [V0_SPLIT_ONLY, V3_PREFIX_SPLIT]
+    failure_injection_ratio: 0.0
+    realm:
+      enabled: true
+      problems: [P8]
+      limit_per_problem: 34
+      boundary_crossing_only: true
+      scenario_applicability_mode: p8_fixed
+    oolong:
+      enabled: false
+    longbench:
+      enabled: false
+
+  stage_feedback_v7_5_main_regression:
+    seeds: [0, 1, 2]
+    extension_variants: [V3_PREFIX]
+    failure_injection_ratio: 0.0
+    realm:
+      enabled: true
+      problems: [P8, P9]
+      limit_per_problem: 5
+      scenario_applicability_mode: p8_fixed
+    oolong:
+      enabled: false
+    longbench:
+      enabled: false
+
+  stage_feedback_v7_5_recovery_regression:
+    seeds: [0, 1, 2]
+    extension_variants: [V3_PREFIX]
+    failure_injection_ratio: 0.25
+    realm:
+      enabled: true
+      problems: [P8, P9]
+      limit_per_problem: 5
+      scenario_applicability_mode: p8_fixed
+    oolong:
+      enabled: false
+    longbench:
+      enabled: false

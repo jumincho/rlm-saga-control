@@ -1,0 +1,92 @@
+paths:
+  run_root_base: /disk/chojm/experiments
+  realm_cache: /disk/chojm/.cache/realm
+
+model:
+  backend: vllm
+  model_name: Qwen/Qwen2.5-14B-Instruct
+  base_url: http://localhost:8000/v1
+  api_key_env: OPENAI_API_KEY
+  temperature: 0.2
+  top_p: 0.95
+  max_new_tokens: 768
+
+runtime:
+  max_depth: 1
+  max_iterations: 6
+  max_timeout: 150
+  max_errors: 8
+  verbose: false
+  saga_mode: iteration
+  saga_file_snapshot_mode: diff
+  saga_max_retries: 2
+  runtime_eval_mode: runtime
+  runtime_validator_mode: auto
+  planning_json_repair: true
+  planning_fill_events_repair: true
+  planning_fill_events_max_attempts: 2
+  planning_targeted_retry: true
+
+run:
+  stage_feedback_v4_reval_smoke:
+    seeds: [0]
+    extension_variants: [V3]
+    failure_injection_ratio: 0.0
+    realm:
+      enabled: true
+      problems: [P8, P9]
+      limit_per_problem: 1
+    oolong:
+      enabled: false
+      dataset_id: oolongbench/oolong-synth
+      split: validation
+      limit: 0
+      stratified: false
+    longbench:
+      enabled: false
+      dataset_id: zai-org/LongBench-v2
+      split: train
+      limit: 0
+      stratified: false
+
+  stage_feedback_v4_reval_main:
+    seeds: [0]
+    extension_variants: [V3]
+    failure_injection_ratio: 0.0
+    realm:
+      enabled: true
+      problems: [P8, P9]
+      limit_per_problem: 12
+    oolong:
+      enabled: false
+      dataset_id: oolongbench/oolong-synth
+      split: validation
+      limit: 0
+      stratified: false
+    longbench:
+      enabled: false
+      dataset_id: zai-org/LongBench-v2
+      split: train
+      limit: 0
+      stratified: false
+
+  stage_feedback_v4_reval_recovery:
+    seeds: [0]
+    extension_variants: [V3]
+    failure_injection_ratio: 0.25
+    realm:
+      enabled: true
+      problems: [P8, P9]
+      limit_per_problem: 8
+    oolong:
+      enabled: false
+      dataset_id: oolongbench/oolong-synth
+      split: validation
+      limit: 0
+      stratified: false
+    longbench:
+      enabled: false
+      dataset_id: zai-org/LongBench-v2
+      split: train
+      limit: 0
+      stratified: false
