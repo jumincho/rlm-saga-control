@@ -83,6 +83,17 @@ source .venv/bin/activate
 # 별도 서빙 환경(예: vLLM, 멀티 GPU) 필요
 ```
 
+부트스트랩과 러너의 절대 경로 가정은 다음 환경변수로 덮어쓸 수 있습니다.
+다만 wrapper `run_*_with_cleanup.sh` 들은 과거 실행 기록으로 그대로 두었고,
+실제 재실행을 시도한다면 `bootstrap_env.sh` 가 시작점입니다.
+
+| 환경변수 | 의미 | 기본값 |
+| --- | --- | --- |
+| `SAGA_EXPERIMENTS_ROOT` | run 디렉토리가 생성되는 위치 | `/disk/chojm/experiments` |
+| `SAGA_LLM_REQUIREMENTS` | bootstrap 시 설치할 requirements.txt | `/disk/chojm/SagaLLM/requirements.txt` |
+| `SAGA_RLM_PACKAGE` | editable 설치할 RLM 패키지 위치 | `/disk/chojm/rlm` |
+| `RLM_SAGA_RUN_ROOT_BASE` | runner Python의 `run_root` 기본값 (YAML보다 우선) | YAML의 `paths.run_root_base` |
+
 ## 상태
 
 🧊 **휴면 중** — 분명한 긍정 신호와 다음 단계 계획이 모두 정리된 상태에서 멈춰 있습니다.
@@ -161,6 +172,19 @@ python3 -m venv --system-site-packages .venv
 source .venv/bin/activate
 # requires a separate serving environment (e.g., vLLM, multi-GPU)
 ```
+
+The bootstrap script and Python runners honor a few environment-variable
+overrides for the original author's absolute-path defaults. The wrapper
+`run_*_with_cleanup.sh` shell scripts are preserved as historical run
+records and have not been parameterized; the practical entry point for a
+re-execution attempt is `bootstrap_env.sh`.
+
+| Variable | Meaning | Default |
+| --- | --- | --- |
+| `SAGA_EXPERIMENTS_ROOT` | Where run directories are created | `/disk/chojm/experiments` |
+| `SAGA_LLM_REQUIREMENTS` | requirements.txt installed at bootstrap | `/disk/chojm/SagaLLM/requirements.txt` |
+| `SAGA_RLM_PACKAGE` | Path of the RLM package installed in editable mode | `/disk/chojm/rlm` |
+| `RLM_SAGA_RUN_ROOT_BASE` | Python runner `run_root` default (takes precedence over YAML) | YAML `paths.run_root_base` |
 
 ### Status
 
