@@ -1,0 +1,70 @@
+name: Verify
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  structure:
+    name: Structure & Syntax
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Required files
+        run: |
+          for f in README.md LICENSE PROJECT_HANDOVER_KO.md; do
+            if [ ! -f "$f" ]; then
+              echo "::error::Missing required file: $f"
+              exit 1
+            fi
+          done
+
+      - name: Python syntax check (code/)
+        run: python -m compileall -q code/
+
+      - name: YAML / JSON configs parse
+        run: |
+          pip install -q pyyaml
+          python -c "
+          import sys, pathlib, yaml, json
+          fail = 0
+          for p in pathlib.Path('code').rglob('*.yaml'):
+              try: yaml.safe_load(p.read_text())
+              except Exception as e: print(f'::error file={p}::{e}'); fail += 1
+          for p in pathlib.Path('code').rglob('*.yml'):
+              try: yaml.safe_load(p.read_text())
+              except Exception as e: print(f'::error file={p}::{e}'); fail += 1
+          for p in list(pathlib.Path('manifests').rglob('*.json')) + list(pathlib.Path('evidence').rglob('*.json')):
+              try: json.loads(p.read_text())
+              except Exception as e: print(f'::warning file={p}::{e}')
+          sys.exit(fail)
+          "
+
+      - name: README internal links resolve
+        run: |
+          missing=0
+          for link in $(grep -oE '\]\([^)]+\)' README.md | sed 's|](||; s|)$||' | grep -v '^http' | grep -v '^#' | sort -u); do
+            path="${link%%#*}"
+            [ -z "$path" ] && continue
+            if [ ! -e "$path" ]; then
+              echo "::warning::README links to missing path: $link"
+              missing=$((missing+1))
+            fi
+          done
+          if [ "$missing" -gt 0 ]; then
+            echo "::warning::$missing README link(s) point to non-existent paths"
+          fi
+
+      - name: No committed secrets
+        run: |
+          if grep -rEn 'AIza[0-9A-Za-z_-]{35}|hf_[A-Za-z0-9]{32,}|sk-[A-Za-z0-9]{32,}' code/ 2>/dev/null; then
+            echo "::error::Potential secret detected in tracked source"
+            exit 1
+          fi
