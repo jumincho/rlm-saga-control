@@ -1,4 +1,18 @@
+<div align="center">
+
 # rlm-saga-control
+
+**LLM 시나리오에 트랜잭션식 Saga 제어를 얹으면 교란이 깨끗하게 복구되는가**
+**Does a Saga-style control layer over an LLM cleanly recover plans from mid-run disturbance?**
+
+![Status](https://img.shields.io/badge/status-dormant-lightgrey)
+![Language](https://img.shields.io/badge/language-Python-3776AB?logo=python&logoColor=white)
+![License](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)
+![Closure](https://img.shields.io/badge/closure-2026--03-blue)
+
+**한국어** · [English](#english)
+
+</div>
 
 > 🧊 **휴면(dormant) 중인 연구 파일럿입니다.**
 
@@ -59,7 +73,7 @@
 └── PROJECT_HANDOVER_KO.md 인수인계 문서
 ```
 
-코드 안에 절대 경로(`/disk/...`) 가정이 박혀 있고 멀티 GPU + 별도 서빙 환경을 전제로 합니다. 새 환경에서 그대로 안 돌 가능성이 높으니 "다시 이해해서 깨우는 출발점" 으로 봐 주세요.
+코드 안에 절대 경로(`/disk/...`) 가정과 멀티 GPU + 별도 서빙 환경 전제가 박혀 있어, 새 환경에서 그대로는 돌지 않습니다. 재실행보다는 "다시 이해해서 깨우는 출발점" 으로 적합합니다.
 
 ## 환경
 
@@ -72,3 +86,86 @@ source .venv/bin/activate
 ## 상태
 
 🧊 **휴면 중** — 분명한 긍정 신호와 다음 단계 계획이 모두 정리된 상태에서 멈춰 있습니다.
+
+---
+
+<a name="english"></a>
+
+## English
+
+> 🧊 **Dormant research pilot.**
+
+### What this set out to test
+
+When you ask a language model to solve a scenario (e.g., a schedule or plan) and an unexpected event disturbs the run partway, the plan unravels. This project layered **Saga-style control borrowed from transactional systems** on top of the LLM to see whether the perturbed part could be cleanly repaired while keeping the rest of the decisions intact.
+
+Three compared regimes:
+
+- Hands-off — let the model handle it.
+- Light branching — split the disturbance out and handle it separately.
+- Full control — prefix lock, verification, recovery, and invariant management together.
+
+Evaluation went beyond plain success rates: "are pre-disturbance decisions preserved?", "is the repair consistent?", "how much extra latency?" and similar operational metrics.
+
+### What it found
+
+- **The full-control regime was clearly better.** In the last completed paired comparison on unseen scenarios, accuracy was meaningfully higher than the light-branching regime.
+- **But not all operational targets were met.** Accuracy improved, but several self-imposed targets — latency, false-positive rate, fallback-call frequency — were not cleared.
+- So: **"works but not yet polished."** The code and configs for the next refinement round were prepared, but never actually run.
+
+Full numbers:
+
+- 🇰🇷 [`closure_reports/project_closure_report_ko_20260327.md`](closure_reports/project_closure_report_ko_20260327.md)
+- 🇬🇧 [`closure_reports/project_closure_report_20260327.md`](closure_reports/project_closure_report_20260327.md)
+
+### Why it's on hold
+
+There is a clear positive signal and a planned next step, but calling the system "ops-grade" needs one more refinement round — and that needs a bigger environment (multi-GPU, separate serving infrastructure). Parking it now and reopening it when the next round is feasible is the natural call.
+
+### Where to look first when revisiting
+
+- [`PROJECT_HANDOVER_KO.md`](PROJECT_HANDOVER_KO.md) — handover document. Read this first.
+- [`code/exp/README.md`](code/exp/README.md) — entry into the code tree.
+- [`evidence/`](evidence/) — key outputs of the last completed paired comparison (paired comparisons, gate alignment reports, failure decompositions).
+
+Recommended priority when reopening: improve gate accuracy → strengthen deterministic recovery logic → reduce fallback frequency → trim latency.
+
+### Code map
+
+| File | What it does |
+|---|---|
+| [`code/exp/runners/common.py`](code/exp/runners/common.py) | Shared experiment-loop primitives: gates, retries, recovery |
+| [`code/exp/runners/run_paired.py`](code/exp/runners/run_paired.py) | Paired-comparison experiment runner |
+| [`code/exp/analysis/gate_fp_breakdown.py`](code/exp/analysis/gate_fp_breakdown.py) | Decomposition of "gate-pass but strict-fail" cases |
+| [`code/exp/analysis/state_timeline_failure_breakdown.py`](code/exp/analysis/state_timeline_failure_breakdown.py) | Per-step state-consistency violation breakdown |
+| [`code/exp/analysis/immutability_alignment_report.py`](code/exp/analysis/immutability_alignment_report.py) | Checks that what should not change has not changed |
+| [`code/exp/bench/scorer.py`](code/exp/bench/scorer.py) | Result scoring (loose / strict criteria) |
+
+### Folder map
+
+```
+.
+├── code/exp/              experiment code (runners, analysis, bench, config)
+├── evidence/              representative outputs of the last completed comparison
+├── manifests/             included-run lists and checksums
+├── closure_reports/       closure reports (KO / EN)
+└── PROJECT_HANDOVER_KO.md handover doc
+```
+
+The code embeds absolute paths (`/disk/...`) and assumes a multi-GPU + separate serving environment, so it will not run as-is in a new environment. The archive is better used as a starting point for understanding and reawakening than for direct re-runs.
+
+### Environment
+
+```bash
+python3 -m venv --system-site-packages .venv
+source .venv/bin/activate
+# requires a separate serving environment (e.g., vLLM, multi-GPU)
+```
+
+### Status
+
+🧊 **Dormant** — a clear positive signal and a prepared next step, paused before that round was run.
+
+### License
+
+Released under [CC BY-NC 4.0](./LICENSE).
