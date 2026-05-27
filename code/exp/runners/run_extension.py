@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 from datetime import datetime
 from pathlib import Path
 
@@ -46,7 +47,12 @@ def main() -> None:
     run_root = (
         Path(args.run_root)
         if args.run_root
-        else Path(global_cfg.get("paths", {}).get("run_root_base", "experiments"))
+        else Path(
+            os.environ.get(
+                "RLM_SAGA_RUN_ROOT_BASE",
+                global_cfg.get("paths", {}).get("run_root_base", "experiments"),
+            )
+        )
         / f"rlm_saga_v1_{timestamp}"
     )
     run_root.mkdir(parents=True, exist_ok=True)
