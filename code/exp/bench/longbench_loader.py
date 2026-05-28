@@ -1,4 +1,16 @@
-"""Loader for LongBench-v2 samples."""
+"""Loader for LongBench-v2 multiple-choice long-context items.
+
+LongBench-v2 is one of the two long-context benchmarks the experiment
+covers (the other is OOLONG). Each item becomes a `BenchmarkSample` with
+`task_type="mcq"`: the scorer will extract a single A/B/C/D letter from
+the model's response and compare to the gold letter. The loader can
+stratify selection by (domain, length) so a small budget still gets
+coverage across domains and context-length buckets — that's the path
+the staged configs take. Track is `long_context`; this track does not
+exercise the Saga repair path, it's there as a sanity-check that the
+extension variants don't *hurt* on tasks where disturbance recovery is
+not the point.
+"""
 
 from __future__ import annotations
 
