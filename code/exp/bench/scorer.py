@@ -1,4 +1,48 @@
-"""Scoring and validation utilities for RLM+Saga experiments."""
+"""Scoring and validation utilities — the load-bearing arbitration layer.
+
+Single source of truth for what counts as a successful plan repair, used
+both live by the Saga validator (`build_rule_validator`) and offline by
+the closure-report re-scorer (`score_prediction`). Behavior pivots on a
+*policy* string:
+
+- `runtime_v3` — what the Saga layer uses live; lenient on hard-fails so
+  recoverable issues do not knock out the agent.
+- `runtime_p8_hard_v1` — runtime policy with all three hard constraints
+  enforced; used for P8 (boundary-crossing) samples where the partial-
+  compensation invariant is the whole point.
+- `strict_v1` — the offline "is it actually correct" judge; enforces
+  disruption handling, immutable prefix, and state consistency hard.
+- `relaxed_v1` — strict on disruption handling, soft on immutable prefix
+  and state, used to sanity-check that strict failures are not just the
+  strict policy being severe.
+
+Loose vs strict scoring refers to whether those three constraint families
+are hard-failed. For planning tasks the scorer:
+
+1. Parses the model's JSON (with REPL-output recovery fallbacks); empty /
+   unparseable plans short-circuit to a single violation.
+2. Checks per-event well-formedness (required fields, valid times).
+3. Checks deadline / open-close constraints from `constraints`.
+4. If there are `disruptions`: builds per-actor timelines, decides which
+   segments are "post-disruption" or "crossing the disruption boundary",
+   checks whether the disruption was actually reflected (`disruption_applied`),
+   whether the boundary-crossing segment was split into a pre/post pair
+   (`crossing_split_applied`), whether partial compensation matches the
+   pre-immutable / post-extended pattern, whether the immutable prefix
+   (events ending at or before the alert minute) survived unchanged, and
+   whether per-actor windows are monotonic across the alert boundary.
+
+The diagnostics dict produced here is what the runner stamps onto every
+output row; analysis modules then pivot off those fields.
+
+For MCQ tasks the scorer extracts a single A/B/C/D letter; for generic
+QA it does exact-match plus tolerant substring match against `|`-
+separated multi-answer targets.
+
+`build_rule_validator` wraps the same machinery for the Saga layer's
+in-loop accept / augment / reject decision: minor violations (≤ 2) come
+back as `augment` so the model can revise; more get a `reject`.
+"""
 
 from __future__ import annotations
 

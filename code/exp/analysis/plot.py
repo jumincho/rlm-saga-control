@@ -1,4 +1,13 @@
-"""Plot helper for summarized metrics."""
+"""Render the three headline matplotlib plots from the metrics CSV.
+
+The minimal plot helper. Takes the metrics CSV produced by
+`summarize.py` and writes three PNGs into `out_dir`: per-variant
+success rate, p95/p99 wall-time tail, and p95/p99 token-count tail.
+That's the same set of numbers the closure report's accuracy /
+latency / cost panel reads off; this script just gives a visual.
+Not used in the paired-statistics path — those tables live in
+`paired_stats.py` and the dual-eval markdown report.
+"""
 
 from __future__ import annotations
 

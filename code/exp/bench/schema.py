@@ -1,4 +1,17 @@
-"""Output schema and parsing helpers for RLM+Saga experiments."""
+"""Output schema and tolerant JSON parser for model responses.
+
+The planning track forces the model to emit a single JSON object with an
+`events` list of `{start, end, who, what, location, notes}` records.
+`render_json_instruction` is the user-facing instruction snippet that goes
+into the prompt. `parse_json_response` is the corresponding parser, and it
+is deliberately permissive: code-fence wrappers (```json ...```) are
+stripped, balanced `{...}` blocks are scanned out of mixed REPL output,
+trailing commas are tolerated, and Python-literal dicts (`{'key': ...}`)
+are accepted as a last-resort fallback. The parser prefers candidates
+that already match the planning schema shape (i.e., have an `events`
+list) so that mixed REPL output with multiple JSON-ish objects still
+resolves to the intended plan.
+"""
 
 from __future__ import annotations
 

@@ -1,4 +1,42 @@
-"""Summarize baseline vs extension JSONL results into CSV and Markdown report."""
+"""Produce the per-variant headline metrics table from raw JSONL.
+
+The aggregate summarizer. Reads `baseline.jsonl` and `extension.jsonl`,
+joins them, and emits a per-variant CSV plus a markdown report. The
+table is wide on purpose — it covers everything the closure-report
+checks against:
+
+- Accuracy: `success_rate`, `recovery_success_rate`,
+  `success_at_equal_budget` / `success_at_equal_time` (V0's median
+  budget / wall-time used as the equal-cost cap).
+- Safety: `invalid_commit_rate`, `state_corruption_rate`, average
+  rollbacks / retries.
+- Output structure: `valid_json_rate`, `non_empty_events_rate`,
+  `prefix_edit_attempt_detected_rate`,
+  `immutability_guard_triggered_rate`, `guard_view_hash_match_rate` /
+  `scorer_view_hash_match_rate`, candidate-discard ratios.
+- Boundary / disruption: every `disruption_*`, `partial_compensation_*`,
+  `crossing_split_*`, `immutable_prefix_*`, `state_at_alert_consistent_*`,
+  and `split_apply_mode` family ("REAL_CROSSING_FOUND",
+  "SYSTEM_CONSTRUCTED_CROSSING_FROM_STATE",
+  "SYNTHETIC_INSERTED_NO_TRAVEL_FOUND", "FAILED_PARSE",
+  "FAILED_CONFLICT_WITH_LOCK").
+- Gate: `boundary_gate_passed_rate`, gate-fix breakdowns,
+  `boundary_gate_failed_reason_*` (non_monotonic / missing_boundary
+  / state_mismatch / immutable_terms / marker_lost),
+  `v3_fallback_to_split_only_rate`.
+- Cost: `wall_time_p50/p90/p95/p99`, `tokens_p50/p90/p95/p99`,
+  per-component time (`llm_time_total_sec`,
+  `validator_time_total_sec`, `postproc_time_total_sec`,
+  `timeline_norm_time_total_sec`).
+- LLM-call reason mix (`plan` / `format` / `fill_events`
+  / `boundary_crossing` / `constraint` / `photo_time` /
+  `tailor_hours`).
+
+`success_criteria_line` formalizes the pre-registered V2 vs V0
+acceptance rule (>=25% reduction on invalid_commit / state_corruption,
+success drop ≤ 5pp, P95 wall-time or tokens improved) that the closure
+report quotes as one of the operational targets V3 did *not* clear.
+"""
 
 from __future__ import annotations
 

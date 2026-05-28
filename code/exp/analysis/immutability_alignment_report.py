@@ -1,4 +1,24 @@
-"""Generate immutable-definition alignment report between runner guard view and scorer view."""
+"""Confirm the runner's immutability guard and the offline scorer agree.
+
+The runtime immutability guard hashes the locked prefix (events ending
+at or before the alert minute) and rejects candidates whose prefix
+hash drifts. The offline scorer canonicalizes the same prefix and also
+hashes it; if the two views ever disagree, "immutability preserved"
+becomes a meaningless claim. This script recomputes the scorer's view
+hash for every row where `crossing_split_applicable=1 and
+immutable_prefix_after_split_ok=0`, joins with the guard view hash
+already stamped on the row, and labels each failure as:
+
+- `BOTH_MATCH`               — neither view sees a problem (rare here).
+- `GUARD_MATCH_SCORER_MISMATCH` — guard accepted, strict scorer rejects.
+- `GUARD_MISMATCH_SCORER_MATCH` — guard rejected, strict scorer accepts.
+- `BOTH_MISMATCH`            — both views see drift.
+- `SCORER_NON_MONOTONIC`     — the final plan isn't even per-actor
+  monotonic, so the scorer view question is moot.
+
+The closure-report's "guard vs strict view alignment" check is the
+match-rate this script reports on `BOTH_MATCH` + `BOTH_MISMATCH`.
+"""
 
 from __future__ import annotations
 

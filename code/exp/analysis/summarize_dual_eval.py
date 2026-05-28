@@ -1,4 +1,20 @@
-"""Re-score completed runs with runtime/strict/relaxed evaluators and summarize all modes."""
+"""Re-score completed runs under all three policies and emit side-by-side tables.
+
+The "did the runtime gate agree with the strict judge" workflow. Takes
+the raw baseline + extension JSONL, then for each mode in
+{`runtime`, `strict`, `relaxed`} re-scores every row through
+`evaluate_prediction` (which dispatches through
+`exp.bench.evaluator_offline`), refreshes the `success` /
+`violation_count` / diagnostics fields, and writes a fresh
+`rescored_<mode>.jsonl`, `metrics_<mode>.csv`, and
+`report_<mode>.md`. The markdown report includes paired wins / losses /
+ties for each non-V0 variant against V0 under that mode, plus a
+sanity-check section that flags duplicate keys or missing pairs.
+
+This is the entry point the gate-alignment and gate-FP-breakdown
+analyses chain off — once the runtime and strict JSONL exist, those
+two scripts can be joined on `(sample_id, seed, variant)`.
+"""
 
 from __future__ import annotations
 

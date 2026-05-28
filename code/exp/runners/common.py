@@ -1,4 +1,42 @@
-"""Shared utilities for baseline/extension experiment runners."""
+"""Shared per-sample machinery for every runner.
+
+The hub module. Holds the parts that every runner shares so that
+`run_baseline`, `run_extension`, `run_paired`, and the various
+historical wrappers stay thin. Concretely:
+
+- **Config / samples**: `load_experiment_config` reads the stage's YAML,
+  `load_stage_samples` calls the right benchmark loaders (REALM-Bench
+  planning, OOLONG, LongBench-v2) under the seed and limits the stage
+  asks for.
+- **Failure injection**: `apply_failure_injection` deterministically
+  perturbs a sample based on `sample_id + seed + ratio` so each variant
+  sees identical disturbance. Three families: code exception, file I/O
+  failure, and disruption escalation (+30min on listed disruptions).
+- **The per-sample loop**: `run_single_sample` is the dispatch — for V0
+  it just runs plain RLM; for V1/V2/V3 (and the V3-family ablations) it
+  layers the Saga primitives. That includes building the runtime
+  validator, the boundary gate (with the gate-pass / gate-fail-reasons
+  loop), targeted retry, the deterministic recovery routines (boundary
+  split, prefix lock, immutable-prefix guard, photo_time repair,
+  state-timeline normalization), the fallback path when the gate cannot
+  be satisfied, and the candidate-best-of selection.
+- **Bookkeeping**: every per-sample row carries the validator policy
+  version, gate pass / fail reasons (`PHOTO_TIME_EXCEEDED`,
+  `NON_MONOTONIC`, `MISSING_BOUNDARY`, `STATE_MISMATCH`,
+  `IMMUTABLE_TERMS`, `MARKER_LOST`), split apply mode
+  (`REAL_CROSSING_FOUND`, `SYSTEM_CONSTRUCTED_CROSSING_FROM_STATE`,
+  `SYNTHETIC_INSERTED_NO_TRAVEL_FOUND`, etc.), guard view hash and
+  scorer view hash for immutability cross-check, LLM call count and
+  per-stage timing (LLM / validator / postproc / timeline-norm), and
+  fallback-rate / wall-time tracking that the closure report's
+  operational table reads off.
+- **Path resolution**: `WORKSPACE_ROOT` + injection of the local `rlm`
+  package onto `sys.path`. The runners honor `RLM_SAGA_RUN_ROOT_BASE`
+  / `paths.run_root_base` for where runs land; the bootstrap script
+  uses `SAGA_EXPERIMENTS_ROOT`, `SAGA_LLM_REQUIREMENTS`,
+  `SAGA_RLM_PACKAGE` to point at the venv / requirements / RLM package.
+  See `GLOSSARY.md` for these variables.
+"""
 
 from __future__ import annotations
 
