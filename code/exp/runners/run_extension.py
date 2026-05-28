@@ -1,4 +1,20 @@
-"""Run RLM+Saga extension variants."""
+"""Extension runner: RLM+Saga variants V1 / V2 / V3.
+
+Runs the Saga-control extensions over the same sample stream the baseline
+sees. The three variants correspond to a stepped buildup of the control
+story:
+
+- V1 — RLM + transaction layer only (rollback/retry, no validator).
+- V2 — V1 + rule-based runtime validator (accept / augment / reject
+  decisions on the candidate plan before commit).
+- V3 — V2 + retry policy + prefix-lock + boundary-split / deterministic
+  recovery. "Full Saga control" in the closure report.
+
+`paired` is the more common entry point in the v7.* rounds because it
+forces V0 and these variants to see exactly the same samples; this
+runner is the path for running extensions alone (e.g., to add a missing
+variant to an already-completed baseline run).
+"""
 
 from __future__ import annotations
 
