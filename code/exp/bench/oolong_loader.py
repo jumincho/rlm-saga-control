@@ -1,4 +1,14 @@
-"""Loader for OOLONG synthetic long-context benchmark."""
+"""Loader for OOLONG synthetic long-context QA samples.
+
+OOLONG is the second long-context benchmark, complementing LongBench-v2.
+Items here are open-form QA rather than MCQ; the scorer falls back to
+exact-match plus a tolerant span match. Loader can stratify selection
+by context-length bucket (short / medium / long / xlong) so a small
+sample still covers the long tail. Like LongBench, this track does not
+exercise the Saga repair path — it's there to confirm the extension
+variants aren't trading away long-context QA accuracy in exchange for
+the planning-track gains.
+"""
 
 from __future__ import annotations
 
