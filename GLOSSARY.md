@@ -160,9 +160,7 @@ present, and the env vars below pointing at them.
 ## Environment variables and `/disk/chojm/...` paths
 
 The codebase has hard-coded absolute paths from the original author's
-machine. They are all overridable via environment variables; nothing
-has been rewritten to remove them (the closure-report artifacts
-reference them, so they stay as historical record).
+machine. They are all overridable via environment variables.
 
 | Variable | What it points at | Default in code |
 |---|---|---|
@@ -188,29 +186,8 @@ The `--variants` list always includes V0 plus one or more extensions;
 the v7.13 last completed paired round used `V0 + V3_PREFIX_SPLIT` as
 its canonical pair.
 
-## Why the bootstrap wrapper scripts are kept
-
-`runners/run_*_with_cleanup.sh` (and `bootstrap_env.sh`,
-`setup_vllm.sh`) are the bash launch scripts that actually drove each
-round of experiments. They contain absolute paths (`/disk/chojm/...`),
-specific run IDs, hard-coded date stamps, and per-round override
-arguments. They are preserved **as historical record**, not as a
-re-execution path:
-
-- They are what each closure-report figure was generated from. The
-  rows in `manifests/run_index.csv` reference these scripts and the
-  run directories they produced.
-- Renaming or parameterizing them retroactively would silently break
-  the cross-references in `manifests/SHA256SUMS.txt` and the closure
-  reports.
-- The practical entry point for a re-execution attempt is the much
-  smaller `bootstrap_env.sh` plus the YAML configs under
-  `config/`. The wrappers can be read as documentation of how each
-  round was invoked.
-
 ## Closure reports
 
 The two long-form writeups in `closure_reports/` are the canonical
 project narrative; the artifacts under `evidence/` are the
-representative outputs that the reports cite. This GLOSSARY is the
-bridge between the vocabulary they use and the code that produced it.
+representative outputs that the reports cite.
