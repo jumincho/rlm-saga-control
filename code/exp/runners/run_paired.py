@@ -1,4 +1,23 @@
-"""Run paired baseline + extension on exactly the same sample stream."""
+"""Paired comparison runner: V0 plus one or more extension variants on identical samples.
+
+The headline-table runner. The paired comparison is the closure-report's
+main claim: full-control variants (V3 family) accuracy versus the
+hands-off baseline V0 on the *exact same* sample stream, so per-item
+wins/losses can be counted (sign-test) and bootstrap CIs computed by
+`analysis/paired_stats.py`. The runner walks the sample stream once
+per seed and emits V0 first, then each selected extension on the same
+`injected` sample, ensuring all variants saw exactly the same disturbance
+state and the same prompt.
+
+Supported variants beyond V0/V1/V2/V3 include the V3 family ablations
+that the v7.* rounds added: V0_SPLIT_ONLY (only the boundary split, no
+prefix lock), V3_BASE / V3_PREFIX / V3_PREFIX_SPLIT / V3_PREFIX_NO_SPLIT
+— used to attribute V3's gains to prefix-lock vs split vs both.
+
+Run-root resolution honors `--run-root`, then `RLM_SAGA_RUN_ROOT_BASE`,
+then `paths.run_root_base` from the YAML — see the GLOSSARY for env var
+documentation.
+"""
 
 from __future__ import annotations
 
