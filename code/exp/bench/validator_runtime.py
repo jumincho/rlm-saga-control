@@ -1,4 +1,21 @@
-"""Runtime validator interface (used during agent execution)."""
+"""Runtime validator the Saga layer calls during agent execution.
+
+When the agent emits a candidate plan, the Saga layer hands it to this
+validator before committing — accept, augment (give back feedback and
+let the model retry), or reject. The wrapped scorer policy is normally
+`runtime_v3`, which is deliberately softer than the offline strict
+judge so the agent doesn't get knocked out by recoverable issues. P8
+(boundary-crossing) samples get the harder `runtime_p8_hard_v1` policy
+because the partial-compensation invariant is the whole point there;
+`resolve_runtime_validator_policy` picks the policy based on the sample
+metadata's `problem` field.
+
+The "auto" mode is what the runner uses by default; "runtime" and
+"p8_hard" overrides exist for debug and for the hard-mode follow-up
+runs (v7.x). `get_runtime_validator_version` is recorded in the per-row
+output so re-scoring under a different evaluator never gets confused
+about which policy a row was committed under.
+"""
 
 from __future__ import annotations
 
