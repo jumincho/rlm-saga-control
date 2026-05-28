@@ -1,4 +1,24 @@
-"""Summarize split-debug runtime fields from JSONL outputs."""
+"""Aggregate the runtime split-attempt bookkeeping by variant.
+
+A focused debug summary. For each variant, reports: how often a
+boundary split was attempted (`split_attempted_rate`), how many
+attempts on average, the rate at which the attempt actually produced
+a `boundary_split_pre` / `boundary_split_post` pair (`split_applied
+_runtime_rate`), whether those markers survived into the final commit
+(`split_marker_survived_rate`), and the distribution of
+`split_apply_mode` values:
+
+- `REAL_CROSSING_FOUND`                       — a real travel segment
+  crossed the alert boundary and was split.
+- `SYSTEM_CONSTRUCTED_CROSSING_FROM_STATE`    — no real crossing, but
+  a synthetic crossing was reconstructed from the actor state.
+- `SYNTHETIC_INSERTED_NO_TRAVEL_FOUND`        — no travel data
+  available; a synthetic pre/post pair was inserted.
+
+Plus a top-N table of `split_failure_reason`. Inputs are the raw
+JSONL (no re-scoring needed); used in the v7.1 — v7.3 boundary debug
+rounds to chase `split_applied_runtime_rate` up to 1.0.
+"""
 
 from __future__ import annotations
 
