@@ -1,4 +1,15 @@
-"""Analyze gate false-positive cases (gate-pass but strict-fail)."""
+"""Decompose the gate's false-positive cases — "gate-pass but strict-fail".
+
+The companion to `gate_alignment_report.py`. Once you know there are
+false positives (the gate let the plan through but strict scoring
+rejects it), this script breaks them down by *what* the strict
+evaluator complained about: which violation strings appear most often
+on FP rows, which combinations co-occur, and which
+`state_consistency_failure_reason` values dominate. The output is the
+direct input to the closure-report's "remaining FP causes" line and
+the v7.14 round was specifically aimed at clearing the top of this
+table (`PHOTO_TIME_EXCEEDED` and timeline-monotonicity failures).
+"""
 
 from __future__ import annotations
 
