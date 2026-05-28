@@ -53,7 +53,7 @@
 2. Python venv 생성 후 필요한 패키지 설치.
 3. vLLM 서버 기동(8GPU/TP=8).
 4. `code/exp/runners/run_feedback_v7_14_with_cleanup.sh` 실행.
-5. 완료 후 `reports/`와 `results/summary/`에서 DoD PASS/MISS 확인.
+5. 완료 후 각 run 디렉터리의 `reports/`와 `results/summary/`에서 DoD PASS/MISS 확인.
 
 ## 7. v7.14 진행 목표(요약)
 - photo_time 위반을 deterministic pass로 감소.
