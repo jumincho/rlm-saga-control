@@ -33,12 +33,12 @@
 
 ## 4. 마지막으로 “완주된” 실험 기준
 - 안정적으로 해석 가능한 최신 완주 라운드: v7.13
-- 핵심 참고 run:
+- 핵심 참고 run (원본 실행 환경 기준 경로):
   - `experiments/rlm_saga_v1_feedback_v7_13_full_20260303_054205`
-- 핵심 리포트:
-  - `reports/stage_v7_13_full_execution_report_ko.md`
-  - `reports/gate_alignment_v7_13_boundary_test_v8.md`
-  - `reports/state_timeline_failure_breakdown_v7_13_boundary_test_v8.md`
+- 본 보관본에 포함된 핵심 리포트 (`evidence/v7_13_boundary_test_v8/reports/`):
+  - `evidence/v7_13_boundary_test_v8/reports/stage_v7_13_full_execution_report_ko.md`
+  - `evidence/v7_13_boundary_test_v8/reports/gate_alignment_v7_13_boundary_test_v8.md`
+  - `evidence/v7_13_boundary_test_v8/reports/state_timeline_failure_breakdown_v7_13_boundary_test_v8.md`
 
 ## 5. 실험 데이터/산출물 위치 규칙
 - 각 run 폴더 공통 구조:
