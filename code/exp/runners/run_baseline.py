@@ -1,4 +1,18 @@
-"""Run baseline V0 (plain RLM/local env)."""
+"""Hands-off baseline runner: V0 (plain RLM, no Saga control).
+
+The "hands-off" regime in the three-way comparison. The runner loads the
+stage's sample stream (REALM-Bench planning + LongBench-v2 + OOLONG, per
+the YAML config), optionally injects failures deterministically by
+sample id, and writes one JSONL row per sample under `results/raw/`.
+No prefix lock, no validator-driven retry, no Saga recovery — whatever
+the model emits gets scored as-is. This is the reference the other two
+regimes (light branching V1/V2, full Saga control V3) get paired against
+in `run_paired.py`.
+
+Run directory layout is shared with the extension runners so that the
+analysis modules can merge baseline + extension JSONL into a single
+DataFrame keyed by (sample_id, seed, stage).
+"""
 
 from __future__ import annotations
 
