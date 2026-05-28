@@ -1,4 +1,17 @@
-"""Orchestrate baseline + extension + summarization."""
+"""End-to-end orchestrator: baseline → extension → summary in one command.
+
+Convenience entry point for a single stage. Runs the baseline runner,
+then the extension runner, then the summary analysis, into a fresh
+`experiments/rlm_saga_v1_<timestamp>/` run root. Also checks that the
+serving host actually has the expected 8 GPUs available (the closure-
+report runs were all done on a multi-GPU vLLM serving setup); the
+nvidia-smi snapshot is dumped into `runs/vllm_server_logs/` as evidence.
+
+For the v7.* refinement rounds the actual launch path is the
+`run_*_with_cleanup.sh` wrappers next to this file, not this script —
+those wrappers are kept as historical records of how each round was
+actually invoked.
+"""
 
 from __future__ import annotations
 
