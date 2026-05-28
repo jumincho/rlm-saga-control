@@ -1,4 +1,20 @@
-"""Paired success statistics (wins/losses/ties, sign-test p, bootstrap CI)."""
+"""Sign test + bootstrap CI on paired success diffs (the headline number).
+
+The arithmetic that turns paired baseline + extension JSONL into the
+closure-report's headline claim ("V3 wins more samples than V0 with
+p < 0.05"). For every (sample_id, seed, stage) that appears for both
+the `left` (default `V0`) and `right` (default `V3_PREFIX`) variants
+this computes `success_right - success_left`, then reports:
+
+- `wins / losses / ties` counts.
+- `mean_success_diff` and a non-parametric bootstrap 95% CI on the
+  paired diff.
+- A two-sided sign-test p-value on (wins, losses).
+
+The argparse defaults (`left=V0, right=V3_PREFIX`) match the
+configuration used in the last completed paired comparison (v7.13)
+described in the closure report.
+"""
 
 from __future__ import annotations
 
