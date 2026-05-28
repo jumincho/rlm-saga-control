@@ -1,4 +1,29 @@
-"""Loader for REALM-Bench planning tasks (P5/P6/P8/P9)."""
+"""Loader for REALM-Bench planning problems (P5/P6/P8/P9).
+
+REALM-Bench is the *planning* track and the only one that exercises the
+full Saga control story. Each problem instance is a small scheduling /
+plan-execution scenario, optionally with a disruption injected midway
+(P8 is the dedicated boundary-crossing scenario). The loader clones
+REALM-Bench on first use into a local cache, picks per-problem instance
+files (either by `specific_ids` or random sampling under `seed`), and
+turns each into a `BenchmarkSample` with `task_type="planning"`.
+
+`metadata` carries the load-bearing scenario information the scorer
+needs to evaluate immutability, partial compensation, and state
+consistency: constraints (deadlines and store open/close windows),
+disruptions (route, alert time, delay), locations, and travel times.
+For P8 in the boundary-crossing focused track, an *addendum* is added
+to the prompt requiring at least one segment that starts before and
+ends after the alert time, plus `require_boundary_crossing` and the
+boundary hint fields are stamped into metadata so the scorer can check
+that the pre-alert prefix was preserved and only the post-alert
+remainder was compensated.
+
+`scenario_applicability_mode="p8_fixed"` is the safety knob that pins
+the disruption / immutable / state checks as "applicable" up-front for
+P8, preventing output-dependent denominator drift in the final paired
+tables.
+"""
 
 from __future__ import annotations
 
