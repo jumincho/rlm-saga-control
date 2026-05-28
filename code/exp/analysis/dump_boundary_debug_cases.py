@@ -1,4 +1,16 @@
-"""Dump boundary debug cases with violations, split debug fields, and event previews."""
+"""Side-by-side V0 vs V3_PREFIX_SPLIT dump for boundary-crossing samples.
+
+A debug-grade printout, not a metric. For every (sample_id, seed) the
+runner produced rows for, this writes a long markdown block showing
+both variants' success / violations, the runtime split bookkeeping
+(`split_attempted`, `split_applied_runtime`, `split_apply_mode`,
+`split_failure_reason`, `split_marker_survived`), the parsed event
+list, and a small preview of the first few events. Used in the v7.1
+boundary-debug round to pin down why some V3 boundary splits silently
+failed to apply at runtime even though the gate said the crossing
+exists. The v7.* `experiment_feedback_v7_1_boundary_debug.yaml` config
+is the natural input.
+"""
 
 from __future__ import annotations
 
