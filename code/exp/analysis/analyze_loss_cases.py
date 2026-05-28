@@ -1,4 +1,16 @@
-"""Analyze paired loss-cases where baseline wins over extension."""
+"""Diagnose the paired cases where the baseline beats the extension.
+
+In a paired comparison the headline number is "extension wins minus
+baseline wins"; this script focuses on the inverse pile — the cases
+where `V0=1, V3=0`. For each such loss it pulls the right variant's
+violation list, the repair modes attempted, and the transaction
+rollback / retry counts. The output (markdown + CSV) is the rougher
+half of the closure-report failure analysis: the cases where the Saga
+control machinery actively interfered rather than helping. Filters
+support narrowing to a stage (e.g., `stage_feedback_v6_recovery`) and
+a REALM problem prefix (typically `P9`, since P8 / P9 are where the
+control story matters and P8 has its own dedicated analysis).
+"""
 
 from __future__ import annotations
 
