@@ -1,3 +1,27 @@
+"""Decompose state-timeline inconsistency failures by their stamped reason.
+
+The strict scorer's "state_at_alert_consistent" check fails for several
+distinct reasons; this script counts how many V3_PREFIX_SPLIT rows
+carry the violation string "State timeline is inconsistent at
+disruption boundary" and groups them by the runtime-stamped
+`state_consistency_failure_reason`:
+
+- `TIME_EARLY`            — an event ends before it could plausibly
+  have started given upstream travel.
+- `TIME_NON_MONOTONIC`    — per-actor windows overlap or run backwards.
+- `LOCATION_MISMATCH`     — the actor is in two places at once.
+- `MISSING_SUFFIX`        — there is no post-alert activity at all.
+- `MISSING_BOUNDARY_EVENT` — no event sits at the alert minute.
+- `IN_TRANSIT_MISMATCH`   — per-actor "in transit" segment doesn't
+  match adjacent events.
+- `TIME_PARSE_FAIL`       — at least one event's HH:MM didn't parse.
+
+Output is a markdown report with reason counts, split-mode counts,
+stage counts, validator-mode counts, and a handful of example rows
+per reason. Drives the closure-report's "where the boundary state
+consistency check is still failing" line.
+"""
+
 from __future__ import annotations
 
 import argparse
