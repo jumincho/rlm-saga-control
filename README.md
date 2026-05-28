@@ -71,6 +71,7 @@
 ├── evidence/              마지막 완주 비교의 대표 산출물
 ├── manifests/             포함된 run 의 목록과 체크섬
 ├── closure_reports/       종료 보고서 (한국어 / 영문)
+├── GLOSSARY.md            내부 용어 사전
 └── PROJECT_HANDOVER_KO.md 인수인계 문서
 ```
 
@@ -162,6 +163,7 @@ Recommended priority when reopening: improve gate accuracy → strengthen determ
 ├── evidence/              representative outputs of the last completed comparison
 ├── manifests/             included-run lists and checksums
 ├── closure_reports/       closure reports (KO / EN)
+├── GLOSSARY.md            internal-terminology dictionary
 └── PROJECT_HANDOVER_KO.md handover doc
 ```
 
