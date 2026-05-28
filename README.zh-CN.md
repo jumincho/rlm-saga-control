@@ -70,6 +70,7 @@
 ├── evidence/              最后一次完整比较的代表性产出
 ├── manifests/             包含 run 列表与校验和
 ├── closure_reports/       关闭报告(韩文 / 英文)
+├── GLOSSARY.md            内部术语词典
 └── PROJECT_HANDOVER_KO.md 交接文档
 ```
 
