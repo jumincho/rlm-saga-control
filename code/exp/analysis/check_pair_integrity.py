@@ -1,4 +1,14 @@
-"""Validate paired-run integrity between baseline and extension jsonl files."""
+"""Pre-flight check that baseline.jsonl and extension.jsonl really paired up.
+
+A paired claim only holds if every (sample_id, seed, stage) tuple
+appears in both files exactly once. This script confirms exactly that
+before any paired statistic gets quoted: no duplicates within either
+file, equal unique-key counts on each side, full intersection. The
+JSON output (`passed: true/false`) is the gate that the v7.* run
+scripts checked before letting the paired-stats step run. Filters
+support pinning to a specific variant on each side when extension.jsonl
+contains multiple variants.
+"""
 
 from __future__ import annotations
 
