@@ -1,4 +1,26 @@
-"""Analyze immutable-prefix failures and generate taxonomy report."""
+"""Classify *why* immutable-prefix invariants got violated on V3 runs.
+
+When a V3-family variant's run row has `crossing_split_applicable=1`
+but `immutable_prefix_after_split_ok=0`, the prefix was supposed to be
+locked across the disruption boundary and was not. This script walks
+those failure rows, compares the locked-prefix snapshot taken at the
+gate to the prefix the final committed plan actually has, and labels
+each failure with one of:
+
+- `SPLIT_PRE_REBUILT` — the `boundary_split_pre` events that should
+  have stayed as-is got regenerated.
+- `COUNT_OR_ORDER_CHANGED` — number of pre-alert events changed, or
+  their canonical order shifted.
+- `TIME_ONLY_CHANGED` — same (who, what, location) triples but
+  pre-alert event times got rewritten.
+- `LOCATION_OR_STATE_CHANGED` — pre-alert who/what/location identities
+  drifted (the worst kind: the locked past was actually rewritten).
+- `UNKNOWN` — none of the above heuristics fire.
+
+Emits a markdown report grouped by category and optionally a CSV with
+the per-category counts; the failure-mode rollups in the closure
+report's "where V3 is still rough" section pull from this.
+"""
 
 from __future__ import annotations
 
