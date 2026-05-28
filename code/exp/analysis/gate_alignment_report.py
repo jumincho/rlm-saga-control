@@ -1,4 +1,17 @@
-"""Report boundary gate alignment against strict offline evaluator."""
+"""Confusion-matrix-style alignment report: boundary gate vs strict offline judge.
+
+The runtime "boundary gate" is what decides at run time whether the
+agent's candidate plan can be committed; the offline strict evaluator
+is the final correctness judge. If they disagree systematically the
+gate is either being too permissive (FP: gate passes but strict
+fails) or too conservative (FN: strict passes but gate fails). This
+script joins runtime and strict re-scored JSONL on
+`(sample_id, seed, variant)` and produces TP/FN/FP/TN plus
+recall-on-strict-pass and precision-on-gate-pass, with a top-10 of
+gate-fail reasons that produced false negatives. The closure report's
+"gate alignment improved across v7.10 → v7.13" line is read off these
+numbers across rounds.
+"""
 
 from __future__ import annotations
 
