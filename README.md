@@ -10,7 +10,7 @@
 ![License](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)
 ![Closure](https://img.shields.io/badge/closure-2026--03-blue)
 
-**한국어** · [English](#english)
+**한국어** · [English](#english) · [中文](./README.zh-CN.md)
 
 </div>
 
@@ -45,6 +45,7 @@
 
 ## 다시 들여다볼 때는 어디부터
 
+- 📖 [`GLOSSARY.md`](GLOSSARY.md) — 본문과 종료 보고서, 코드 row 에 등장하는 내부 용어(세 가지 regime, gate / gate FP, 불변성, prefix lock, fallback, strict vs loose, `SAGA_*` 환경변수)를 일반어로 정리한 사전
 - [`PROJECT_HANDOVER_KO.md`](PROJECT_HANDOVER_KO.md) — 인수인계 문서 (가장 먼저 읽으면 좋은 글)
 - [`code/exp/README.md`](code/exp/README.md) — 코드 트리 진입점
 - [`evidence/`](evidence/) — 마지막 완주 비교의 핵심 결과물들 (paired 비교, 게이트 정렬 리포트, 실패 분해)
@@ -135,6 +136,7 @@ There is a clear positive signal and a planned next step, but calling the system
 
 ### Where to look first when revisiting
 
+- 📖 [`GLOSSARY.md`](GLOSSARY.md) — Decoder ring for the internal vocabulary that survived into the source tree and the closure reports (the three regimes, gate / gate FP, immutability, prefix lock, fallback, strict vs loose, the `SAGA_*` env vars).
 - [`PROJECT_HANDOVER_KO.md`](PROJECT_HANDOVER_KO.md) — handover document. Read this first.
 - [`code/exp/README.md`](code/exp/README.md) — entry into the code tree.
 - [`evidence/`](evidence/) — key outputs of the last completed paired comparison (paired comparisons, gate alignment reports, failure decompositions).
