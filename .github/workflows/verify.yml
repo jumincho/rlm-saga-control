@@ -19,7 +19,7 @@ jobs:
 
       - name: Required files
         run: |
-          for f in README.md LICENSE PROJECT_HANDOVER_KO.md; do
+          for f in README.md LICENSE PROJECT_HANDOVER_KO.md requirements.txt; do
             if [ ! -f "$f" ]; then
               echo "::error::Missing required file: $f"
               exit 1
@@ -68,3 +68,22 @@ jobs:
             echo "::error::Potential secret detected in tracked source"
             exit 1
           fi
+
+  imports:
+    name: Import resolvability
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install -U pip
+          pip install -r requirements.txt
+
+      # The external `rlm` package is in the checker's built-in optional set.
+      - name: All top-level imports resolve
+        run: python tools/check_imports.py
