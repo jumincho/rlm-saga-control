@@ -1,0 +1,11 @@
+# Direct, pip-installable dependencies of the archived analysis / runner code.
+#
+# NOTE: the experiment *runners* additionally require the external `rlm` (RLM)
+# package and a separate multi-GPU serving stack, which are intentionally not
+# vendored in this archive — see the README (SAGA_RLM_PACKAGE / bootstrap_env.sh).
+# This file covers only the dependencies that are importable from this repo alone.
+datasets
+pandas
+matplotlib
+tqdm
+PyYAML
