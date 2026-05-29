@@ -138,7 +138,7 @@ There is a clear positive signal and a planned next step, but calling the system
 ### Where to look first when revisiting
 
 - 📖 [`GLOSSARY.md`](GLOSSARY.md) — Decoder ring for the internal vocabulary that survived into the source tree and the closure reports (the three regimes, gate / gate FP, immutability, prefix lock, fallback, strict vs loose, the `SAGA_*` env vars).
-- [`PROJECT_HANDOVER_KO.md`](PROJECT_HANDOVER_KO.md) — handover document. Read this first.
+- [`PROJECT_HANDOVER_KO.md`](PROJECT_HANDOVER_KO.md) — handover document (Korean). Read this first.
 - [`code/exp/README.md`](code/exp/README.md) — entry into the code tree.
 - [`evidence/`](evidence/) — key outputs of the last completed paired comparison (paired comparisons, gate alignment reports, failure decompositions).
 
@@ -189,6 +189,8 @@ re-execution attempt is `bootstrap_env.sh`.
 | `SAGA_LLM_REQUIREMENTS` | requirements.txt installed at bootstrap | `/disk/chojm/SagaLLM/requirements.txt` |
 | `SAGA_RLM_PACKAGE` | Path of the RLM package installed in editable mode | `/disk/chojm/rlm` |
 | `RLM_SAGA_RUN_ROOT_BASE` | Python runner `run_root` default (takes precedence over YAML) | YAML `paths.run_root_base` |
+
+The `rlm` package is **not bundled** in this archive. `SAGA_RLM_PACKAGE` is used by `bootstrap_env.sh` (`pip install -e`) to install it; the Python runners additionally expect it at `<workspace>/rlm/` on `sys.path`. Set `SAGA_RLM_PACKAGE` to the path of your local RLM checkout before bootstrapping.
 
 ### Status
 

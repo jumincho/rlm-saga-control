@@ -45,7 +45,7 @@
 ## 重启时先看哪里
 
 - 📖 [`GLOSSARY.md`](GLOSSARY.md) —— 把代码 row、关闭报告、分析表里出现的内部术语(三种 regime、gate / gate FP、不变性、prefix lock、fallback、strict vs loose、`SAGA_*` 环境变量)翻成日常用语的对照表
-- [`PROJECT_HANDOVER_KO.md`](PROJECT_HANDOVER_KO.md) —— 交接文档,建议第一个看
+- [`PROJECT_HANDOVER_KO.md`](PROJECT_HANDOVER_KO.md) —— 交接文档（仅韩文），建议第一个看
 - [`code/exp/README.md`](code/exp/README.md) —— 代码树入口
 - [`evidence/`](evidence/) —— 最后一次完整 paired 比较的代表性产出(paired 比较、gate 对齐报告、失败分解)
 
@@ -92,6 +92,8 @@ bootstrap 脚本和 Python runner 对原作者本机绝对路径默认值都提�
 | `SAGA_LLM_REQUIREMENTS` | bootstrap 时安装的 requirements.txt | `/disk/chojm/SagaLLM/requirements.txt` |
 | `SAGA_RLM_PACKAGE` | 以 editable 模式安装的 RLM 包路径 | `/disk/chojm/rlm` |
 | `RLM_SAGA_RUN_ROOT_BASE` | Python runner 的 `run_root` 默认值(优先于 YAML) | YAML 中的 `paths.run_root_base` |
+
+`rlm` 包**未随本归档捆绑**。`SAGA_RLM_PACKAGE` 由 `bootstrap_env.sh` 用于 `pip install -e` 安装；Python runner 同时也期望该包位于 `<workspace>/rlm/` 并已加入 `sys.path`。在执行 bootstrap 前，请将 `SAGA_RLM_PACKAGE` 设置为本地 RLM 代码仓库的路径。
 
 ## 状态
 
