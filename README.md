@@ -16,6 +16,12 @@
 
 > 🧊 **휴면(dormant) 중인 연구 파일럿입니다.**
 
+## ⭐ 핵심 결과 (TL;DR)
+
+- **본격적인 Saga 제어가 가벼운 분기보다 분명히 더 좋았습니다** — 처음 보는 시나리오에서 정확도가 의미 있게 더 높았습니다(마지막 완주 비교).
+- 단 **운영 지표의 자체 목표선은 여럿 못 넘겼습니다**(지연 시간, 게이트 오탐률, fallback 호출 빈도) — "되긴 되는데 아직 다듬어지지 않은" 상태.
+- 다음 라운드용 코드·설정까지 준비됐지만, 더 큰 환경(멀티 GPU·별도 서빙)이 필요해 멈춰 두었습니다.
+
 ## 무엇을 보려던 연구였나
 
 언어모델에게 어떤 일정/계획 같은 시나리오를 풀게 하는데, 도중에 예상치 못한 사건(교란)이 끼어들면 계획이 흐트러집니다. 이 프로젝트는 그 위에 **트랜잭션 시스템에서 빌려 온 안전망(Saga 스타일 제어)** 을 얹으면, 흐트러진 부분만 깔끔하게 고치면서 나머지 결정은 유지할 수 있을지를 본 연구입니다.
@@ -107,6 +113,12 @@ source .venv/bin/activate
 ## English
 
 > 🧊 **Dormant research pilot.**
+
+### ⭐ Key result (TL;DR)
+
+- **Full Saga-style control clearly beat light branching** — meaningfully higher accuracy on unseen scenarios (the last completed paired comparison).
+- But **several self-imposed operational targets weren't met** (latency, gate false-positive rate, fallback-call frequency) — "works, but not yet polished."
+- Next-round code and configs are prepared, but need a bigger environment (multi-GPU + separate serving), so it's paused.
 
 ### What this set out to test
 
